@@ -5,6 +5,8 @@ name: full-check
 # Requires repo secrets MAGE_USER + MAGE_PASS (repo.magento.com keys).
 
 on:
+  push:
+    branches: [feature/version-compatibility-ci]   # TEMP: remove before merge
   workflow_dispatch:
     inputs:
       magento_version:
@@ -19,7 +21,7 @@ on:
 jobs:
   full-check:
     runs-on: ubuntu-latest
-    name: magento-${{ github.event.inputs.magento_version }}-php${{ github.event.inputs.php_version }}
+    name: magento-${{ github.event.inputs.magento_version || '2.4.8' }}-php${{ github.event.inputs.php_version || '8.3' }}
     env:
       MAGE_USER: ${{ secrets.MAGE_USER }}
       MAGE_PASS: ${{ secrets.MAGE_PASS }}
@@ -27,11 +29,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ github.event.inputs.php_version }}
+          php-version: ${{ github.event.inputs.php_version || '8.3' }}
           coverage: pcov
           extensions: bcmath, ctype, curl, dom, gd, iconv, intl, mbstring, pdo_mysql, simplexml, soap, xsl, zip, sockets
           tools: composer
       - name: Install + run GrumPHP
         env:
-          MAGENTO_VERSION: ${{ github.event.inputs.magento_version }}
+          MAGENTO_VERSION: ${{ github.event.inputs.magento_version || '2.4.8' }}
         run: bash tests/run-matrix-job.sh

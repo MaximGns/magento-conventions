@@ -5,6 +5,8 @@ name: compatibility-simulation
 # coding-standard releases are caught automatically.
 
 on:
+  push:
+    branches: [feature/version-compatibility-ci]   # TEMP: remove before merge
   workflow_dispatch:
     inputs:
       php_versions:

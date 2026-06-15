@@ -6,6 +6,8 @@ name: full-check-all
 # Requires repo secrets MAGE_USER + MAGE_PASS (repo.magento.com keys).
 
 on:
+  push:
+    branches: [feature/version-compatibility-ci]   # TEMP: remove before merge — 6 full Magento installs per push
   workflow_dispatch:
   schedule:
     - cron: '0 7 * * 1'   # weekly, Monday 07:00 UTC
