@@ -16,7 +16,6 @@ parameters:
         - "/Setup/"
         - "pub/"
         - "app/bootstrap.php"
-        # php-cs-fixer ships as a shim (PHAR only, no source), so its classes are unresolvable here.
         - ".php-cs-fixer.php"
 
     # PHPCSFIXER
