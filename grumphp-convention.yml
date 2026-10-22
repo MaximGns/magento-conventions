@@ -7,7 +7,7 @@ parameters:
     # PHPSTAN
     phpstan.autoload_file: ~
     phpstan.configuration: '%root_conventions_dir%%phpstan_file%'
-    phpstan.level: 5
+    phpstan.level: 9
     phpstan.triggered_by: ['php']
     phpstan.memory_limit: "-1"
     phpstan.use_grumphp_paths: true
@@ -15,6 +15,9 @@ parameters:
         - "/Test/"
         - "/Setup/"
         - "pub/"
+        - "app/bootstrap.php"
+        # php-cs-fixer ships as a shim (PHAR only, no source), so its classes are unresolvable here.
+        - ".php-cs-fixer.php"
 
     # PHPCSFIXER
     phpcsfixer.allow_risky: ~
@@ -36,6 +39,7 @@ parameters:
         - /^app\/code\/(.*)/
     phpcs.ignore_patterns:
         - "Test/Unit"
+        - "/Test/"
         - "Setup/Patch/Data"
         - "Setup/Upgrade"
         - "Setup/Install"
