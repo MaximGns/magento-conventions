@@ -150,7 +150,7 @@ Make sure you create a `phpunit.xml` file in your project root.
 | Parameter | Default       | Info                                                     |
 | --- |---------------|----------------------------------------------------------|
 | **clover_coverage.clover_file** | ./.clover.xml | Path to the clover coverage report                       |
-| **clover_coverage.minimum_level** | 0             | Clover minimum level, this will hard fail if not reached |
+| **clover_coverage.minimum_level** | 20            | Clover minimum level, this will hard fail if not reached |
 | **clover_coverage.target_level** | 100           | Clover target level, this will soft fail if not reached  |
 
 #### SECURITYCHECKER COMPOSERAUDIT

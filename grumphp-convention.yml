@@ -99,7 +99,7 @@ parameters:
 
     # CLOVER
     clover_coverage.clover_file: ./.clover.xml
-    clover_coverage.minimum_level: 0
+    clover_coverage.minimum_level: 20
     clover_coverage.target_level: 100
 
 grumphp:

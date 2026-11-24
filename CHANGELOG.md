@@ -8,6 +8,7 @@
 ### Changed
 - Raised the default PHPStan level from 5 to 9 and moved it to `configs/phpstan.neon`
 - `phpcs.standard` now points to `configs/phpcs.xml`
+- Raised the default `clover_coverage.minimum_level` from 0 to 20
 - Moved the PHPStan ignored paths to `excludePaths` in `configs/phpstan.neon` (now also `*/app/bootstrap.php` and `*/.php-cs-fixer.php`)
 
 ### Removed
