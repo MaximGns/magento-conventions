@@ -81,7 +81,6 @@ includes:
     - vendor/phpro/magento-conventions/configs/phpstan.neon
 
 parameters:
-    level: 9
     excludePaths:
         analyse:
             - */Legacy/*
