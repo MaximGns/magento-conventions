@@ -8,18 +8,13 @@ parameters:
     # PHPSTAN
     phpstan.autoload_file: ~
     phpstan.configuration: '%root_conventions_dir%%phpstan_file%'
-    phpstan.level: ~
     phpstan.triggered_by: ['php']
     phpstan.memory_limit: "-1"
     phpstan.use_grumphp_paths: true
-    phpstan.ignore_patterns: []
 
     # PHPCSFIXER
-    phpcsfixer.allow_risky: ~
     phpcsfixer.cache_file: ~
     phpcsfixer.config: '%root_conventions_dir%%phpcs_file%'
-    phpcsfixer.rules: []
-    phpcsfixer.using_cache: ~
     phpcsfixer.config_contains_finder: true
     phpcsfixer.verbose: true
     phpcsfixer.diff: false
@@ -30,9 +25,6 @@ parameters:
     phpcs.severity: ~
     phpcs.warning_severity: ~
     phpcs.error_severity: ~
-    phpcs.whitelist_patterns: []
-    phpcs.ignore_patterns: []
-    phpcs.exclude: []
     phpcs.triggered_by: [php]
 
     # GIT
@@ -113,19 +105,14 @@ parameters:
 grumphp:
     tasks:
         phpstan:
-            level: '%phpstan.level%'
             configuration: '%phpstan.configuration%'
             autoload_file: '%phpstan.autoload_file%'
             triggered_by: '%phpstan.triggered_by%'
             memory_limit: '%phpstan.memory_limit%'
             use_grumphp_paths: '%phpstan.use_grumphp_paths%'
-            ignore_patterns: '%phpstan.ignore_patterns%'
         phpcsfixer:
-            allow_risky: '%phpcsfixer.allow_risky%'
             cache_file: '%phpcsfixer.cache_file%'
             config: '%phpcsfixer.config%'
-            rules: '%phpcsfixer.rules%'
-            using_cache: '%phpcsfixer.using_cache%'
             config_contains_finder: '%phpcsfixer.config_contains_finder%'
             verbose: '%phpcsfixer.verbose%'
             diff: '%phpcsfixer.diff%'
@@ -135,9 +122,6 @@ grumphp:
             severity: '%phpcs.severity%'
             error_severity: '%phpcs.error_severity%'
             warning_severity: '%phpcs.warning_severity%'
-            whitelist_patterns: '%phpcs.whitelist_patterns%'
-            ignore_patterns: '%phpcs.ignore_patterns%'
-            exclude: '%phpcs.exclude%'
             triggered_by: '%phpcs.triggered_by%'
         phplint:
             exclude: '%phplint.exclude%'

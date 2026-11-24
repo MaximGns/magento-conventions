@@ -17,12 +17,12 @@ parameters:
 #### GENERAL
 | Parameter                | Default                                       | Info |
 |--------------------------|-----------------------------------------------| --- |
-| **root_conventions_dir** | vendor/phpro/magento-conventions/Conventions/ | Relative path to the root directory of the convention installation |
+| **root_conventions_dir** | vendor/phpro/magento-conventions/configs/     | Relative path to the config directory of the convention installation |
 
 #### PHPCS
 The excluded sniffs, ignored paths and the `app/code` whitelist live in `configs/phpcs.xml`, so a direct `vendor/bin/phpcs` run uses the same rules as GrumPHP.
 
-Configure project specific sniff exclusions and ignored paths in your own ruleset, not in `phpcs.exclude` or `phpcs.ignore_patterns`. Create a `phpcs.xml.dist` in the project root that extends the convention ruleset:
+The convention no longer sets `phpcs.exclude`, `phpcs.ignore_patterns` or `phpcs.whitelist_patterns`. Configure project specific sniff exclusions and ignored paths in your own ruleset. Create a `phpcs.xml.dist` in the project root that extends the convention ruleset:
 ```xml
 <?xml version="1.0"?>
 <ruleset name="Project">
@@ -37,6 +37,7 @@ Then point GrumPHP to it in `grumphp.yml`:
 parameters:
   phpcs.standard: [phpcs.xml.dist]
 ```
+An exclude pattern from the convention ruleset cannot be removed in a ruleset that extends it. A project that needs to check code outside `app/code` needs its own ruleset with the rules copied from `configs/phpcs.xml`.
 
 | Parameter | Default | Info |
 | --- | --- | --- |
@@ -45,22 +46,16 @@ parameters:
 | **phpcs.severity** | ~ | Global severity level |
 | **phpcs.warning_severity** | ~ | Warning severity level |
 | **phpcs.error_severity** | ~ | Error severity level |
-| **phpcs.whitelist_patterns** | [ ] | Whitelist patterns to check code styling |
-| **phpcs.ignore_patterns** | [ ] | Ignore patterns |
-| **phpcs.exclude** | [ ] | Bullet list of excluded sniffs |
 | **phpcs.triggered_by** | [ php ] | Triggered by |
 
 #### PHP CS FIXER
-If you want to change the rules or check paths, we recommend to create and use your own `.php-cs-fixer.php` file in your project.
+The rules, risky setting, cache setting and checked paths are defined in `configs/.php-cs-fixer.php`. If you want to change them, create your own `.php-cs-fixer.php` file in your project and point `phpcsfixer.config` to it.
 
 | Parameter | Default | Info |
 | --- | --- | --- |
-| **phpcs_file** | cs/.php-cs-fixer.php | Relative path to CS config file |
-| **phpcsfixer.allow_risky** | ~ | Allow risky |
+| **phpcs_file** | .php-cs-fixer.php | Relative path to CS config file |
 | **phpcsfixer.cache_file** | ~ | Create a .php_cs cache file |
-| **phpcsfixer.config** | '%root_dir%%phpcs_file%' | Path to php CS config file |
-| **phpcsfixer.rules** | [ ] | Add custom rules |
-| **phpcsfixer.using_cache** | ~ | Use caching |
+| **phpcsfixer.config** | '%root_conventions_dir%%phpcs_file%' | Path to php CS config file |
 | **phpcsfixer.config_contains_finder** | true | Configuration file uses a finder |
 | **phpcsfixer.verbose** | true | Verbose |
 | **phpcsfixer.diff** | false | Diff |
@@ -76,9 +71,7 @@ If you want to change the rules or check paths, we recommend to create and use y
 | **phplint.triggered_by** | [ 'php', 'phtml' ] | Triggered by files |
 
 #### PHPSTAN
-For existing Magento 2 project, we recommend to set the level to `1` or `0` and fix the issues you encounter. 
-
-The minimal PHPStan version in your project should be `0.12.65` to ensure the `excludePaths` config will work. 
+For existing Magento 2 project, we recommend to set the level to `1` or `0` in your own `phpstan.neon` and fix the issues you encounter.
 
 The ignored paths are defined as `excludePaths` in `configs/phpstan.neon`.
 
@@ -95,7 +88,7 @@ parameters:
     ignoreErrors:
         - identifier: missingType.iterableValue
 ```
-Then point GrumPHP to it in `grumphp.yml`. Leave `phpstan.level` at `~`: a value there is passed as `--level` and overrides the level in the neon file:
+Then point GrumPHP to it in `grumphp.yml`. The convention no longer sets `phpstan.level` or `phpstan.ignore_patterns`; the level and excluded paths come from the neon file:
 ```yaml
 parameters:
   phpstan.configuration: ./phpstan.neon
@@ -103,14 +96,12 @@ parameters:
 
 | Parameter | Default | Info |  
 | --- | --- | --- |
-| **phpstan_file** | phpstan/phpstan.neon | Relative path to PHPStan neon file |
+| **phpstan_file** | phpstan.neon | Relative path to PHPStan neon file |
 | **phpstan.autoload_file** | ~ | Autoload files |
-| **phpstan.configuration** | '%root_dir%%phpstan_file%' | Path to configuration file |
-| **phpstan.level** | ~ | Level of PHPStan (0-9). Overrides the `level` in the neon file (9 in `configs/phpstan.neon`) when set |
+| **phpstan.configuration** | '%root_conventions_dir%%phpstan_file%' | Path to configuration file |
 | **phpstan.triggered_by** | [ 'php' ] | PHPStan triggered files |
 | **phpstan.memory_limit** | "-1" | Memory limit PHPStan uses |
 | **phpstan.use_grumphp_paths** | true | Use GrumPHP paths |
-| **phpstan.ignore_patterns** | [ ] | Ignore patterns |
 
 #### PHPUNIT
 Make sure you create a `phpunit.xml` file in your project root.
@@ -143,9 +134,9 @@ Make sure you create a `phpunit.xml` file in your project root.
 | **git_commit_message.max_body_width**    | 80 | Git commit body message length                                               |
 | **git_commit_message.case_insensitive**  | true | Message is case sensitive                                                    |
 | **git_commit_message.multiline**         | true | Message can contain multiple lines                                           |
-| **git_branch_name.blacklist**            | [ "development", "production", "staging", "master", "infra" ] | List of non-wanted branch names                                              |
-| **git_branch_name.whitelist**            | Check phpro-grumphp.yml itself | Allowed branch names                                                         |
-| **git_blacklist.keywords**               | Check phpro-grumphp.yml itself | Disallowed words                                                             |
+| **git_branch_name.blacklist**            | [ "development", "production", "staging", "master" ]          | List of non-wanted branch names                                              |
+| **git_branch_name.whitelist**            | Check grumphp-convention.yml   | Allowed branch names                                                         |
+| **git_blacklist.keywords**               | Check grumphp-convention.yml   | Disallowed words                                                             |
 | **git_blacklist.triggered_by**           | ['php', 'js', 'html', 'phtml']| Triggered by files                                                           |
 | **git_branch_name.allow_detached_head**  | true | Allow detached head                                                          |
 
@@ -158,9 +149,9 @@ Make sure you create a `phpunit.xml` file in your project root.
 #### CLOVER
 | Parameter | Default       | Info                                                     |
 | --- |---------------|----------------------------------------------------------|
-| **clover_coverage.clover_file** | ./.clover.xml | The maximum file size                                    |
-| **clover_coverage.minimum_level** | 20            | Clover minimum level, this will hard fail if not reached |
-| **clover_coverage.target_level** | 80            | Clover target level, this will soft fail if not reached  |
+| **clover_coverage.clover_file** | ./.clover.xml | Path to the clover coverage report                       |
+| **clover_coverage.minimum_level** | 0             | Clover minimum level, this will hard fail if not reached |
+| **clover_coverage.target_level** | 100           | Clover target level, this will soft fail if not reached  |
 
 #### SECURITYCHECKER COMPOSERAUDIT
 | Parameter                                     | Default  | Info                                         |

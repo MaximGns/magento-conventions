@@ -6,9 +6,12 @@
 - Added `excludePaths` to the PHPStan config
 
 ### Changed
-- Raised the default PHPStan level from 5 to 9 and moved it to `configs/phpstan.neon`; `phpstan.level` now defaults to `~`
-- `phpcs.standard` now points to `configs/phpcs.xml`; `phpcs.exclude`, `phpcs.ignore_patterns` and `phpcs.whitelist_patterns` default to empty
-- Moved the PHPStan ignored paths to `excludePaths` in `configs/phpstan.neon` (now also `*/app/bootstrap.php` and `*/.php-cs-fixer.php`); `phpstan.ignore_patterns` defaults to empty
+- Raised the default PHPStan level from 5 to 9 and moved it to `configs/phpstan.neon`
+- `phpcs.standard` now points to `configs/phpcs.xml`
+- Moved the PHPStan ignored paths to `excludePaths` in `configs/phpstan.neon` (now also `*/app/bootstrap.php` and `*/.php-cs-fixer.php`)
+
+### Removed
+- Removed the `phpstan.level`, `phpstan.ignore_patterns`, `phpcs.exclude`, `phpcs.ignore_patterns`, `phpcs.whitelist_patterns`, `phpcsfixer.allow_risky`, `phpcsfixer.rules` and `phpcsfixer.using_cache` parameters; these settings live in the files in `configs/`. Projects that set these parameters must move them to their own config files
 
 ## [0.4.1]
 ### Fixed
