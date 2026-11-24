@@ -71,7 +71,7 @@ The rules, risky setting, cache setting and checked paths are defined in `config
 | **phplint.triggered_by** | [ 'php', 'phtml' ] | Triggered by files |
 
 #### PHPSTAN
-For existing Magento 2 project, we recommend to set the level to `1` or `0` in your own `phpstan.neon` and fix the issues you encounter.
+Existing Magento 2 projects should run at least level `5` and work up to the standard level `9` step by step. Set the level in your own `phpstan.neon`.
 
 The ignored paths are defined as `excludePaths` in `configs/phpstan.neon`.
 
