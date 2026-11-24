@@ -20,15 +20,34 @@ parameters:
 | **root_conventions_dir** | vendor/phpro/magento-conventions/Conventions/ | Relative path to the root directory of the convention installation |
 
 #### PHPCS
+The excluded sniffs, ignored paths and the `app/code` whitelist live in `configs/phpcs.xml`, so a direct `vendor/bin/phpcs` run uses the same rules as GrumPHP.
+
+Configure project specific sniff exclusions and ignored paths in your own ruleset, not in `phpcs.exclude` or `phpcs.ignore_patterns`. Create a `phpcs.xml.dist` in the project root that extends the convention ruleset:
+```xml
+<?xml version="1.0"?>
+<ruleset name="Project">
+    <rule ref="./vendor/phpro/magento-conventions/configs/phpcs.xml">
+        <exclude name="Magento2.Some.Sniff"/>
+    </rule>
+    <exclude-pattern>*/Legacy/*</exclude-pattern>
+</ruleset>
+```
+Then point GrumPHP to it in `grumphp.yml`:
+```yaml
+parameters:
+  phpcs.standard: [phpcs.xml.dist]
+```
+
 | Parameter | Default | Info |
 | --- | --- | --- |
-| **phpcs.standard** | [ Magento2, PSR2 ] | The standards to check code styling |
+| **phpcs_ruleset_file** | phpcs.xml | Relative path to the phpcs ruleset |
+| **phpcs.standard** | [ '%root_conventions_dir%%phpcs_ruleset_file%' ] | The standards to check code styling |
 | **phpcs.severity** | ~ | Global severity level |
 | **phpcs.warning_severity** | ~ | Warning severity level |
 | **phpcs.error_severity** | ~ | Error severity level |
-| **phpcs.whitelist_patterns** | [ '/^app\/code\/(.*)/' ] | Whitelist patterns to check code styling |
-| **phpcs.ignore_patterns** | [ "Test/Unit", "/Test/", "Setup/Patch/Data", "Setup/Upgrade", "Setup/Install" ] | Ignore patterns |
-| **phpcs.exclude** | [ Magento2.Functions.StaticFunction, Magento2.Exceptions.DirectThrow, Magento2.Exceptions.ThrowCatch, Magento2.Commenting.ClassAndInterfacePHPDocFormatting, Magento2.Commenting.ClassPropertyPHPDocFormatting, Magento2.Commenting.ConstantsPHPDocFormatting, Magento2.Annotation.MethodAnnotationStructure, Magento2.Annotation.MethodArguments ] | Bullet list of excluded sniffs |
+| **phpcs.whitelist_patterns** | [ ] | Whitelist patterns to check code styling |
+| **phpcs.ignore_patterns** | [ ] | Ignore patterns |
+| **phpcs.exclude** | [ ] | Bullet list of excluded sniffs |
 | **phpcs.triggered_by** | [ php ] | Triggered by |
 
 #### PHP CS FIXER
@@ -61,16 +80,37 @@ For existing Magento 2 project, we recommend to set the level to `1` or `0` and 
 
 The minimal PHPStan version in your project should be `0.12.65` to ensure the `excludePaths` config will work. 
 
+The ignored paths are defined as `excludePaths` in `configs/phpstan.neon`.
+
+Configure project specific PHPStan settings (level, excluded paths, ignored errors, stubs) in your own `phpstan.neon` that includes the convention config:
+```neon
+includes:
+    - vendor/phpro/magento-conventions/configs/phpstan.neon
+
+parameters:
+    level: 9
+    excludePaths:
+        analyse:
+            - */Legacy/*
+    ignoreErrors:
+        - identifier: missingType.iterableValue
+```
+Then point GrumPHP to it in `grumphp.yml`. Leave `phpstan.level` at `~`: a value there is passed as `--level` and overrides the level in the neon file:
+```yaml
+parameters:
+  phpstan.configuration: ./phpstan.neon
+```
+
 | Parameter | Default | Info |  
 | --- | --- | --- |
 | **phpstan_file** | phpstan/phpstan.neon | Relative path to PHPStan neon file |
 | **phpstan.autoload_file** | ~ | Autoload files |
 | **phpstan.configuration** | '%root_dir%%phpstan_file%' | Path to configuration file |
-| **phpstan.level** | 9 | Level of PHPstan (0-9) |
+| **phpstan.level** | ~ | Level of PHPStan (0-9). Overrides the `level` in the neon file (9 in `configs/phpstan.neon`) when set |
 | **phpstan.triggered_by** | [ 'php' ] | PHPStan triggered files |
 | **phpstan.memory_limit** | "-1" | Memory limit PHPStan uses |
 | **phpstan.use_grumphp_paths** | true | Use GrumPHP paths |
-| **phpstan.ignore_patterns** | [ "/Test/", "/Setup/", "pub/", "app/bootstrap.php", ".php-cs-fixer.php" ] | Ingore patterns |
+| **phpstan.ignore_patterns** | [ ] | Ignore patterns |
 
 #### PHPUNIT
 Make sure you create a `phpunit.xml` file in your project root.

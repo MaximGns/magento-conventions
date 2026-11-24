@@ -3,20 +3,16 @@ parameters:
     root_conventions_dir: vendor/phpro/magento-conventions/configs/
     phpstan_file: phpstan.neon
     phpcs_file: .php-cs-fixer.php
+    phpcs_ruleset_file: phpcs.xml
 
     # PHPSTAN
     phpstan.autoload_file: ~
     phpstan.configuration: '%root_conventions_dir%%phpstan_file%'
-    phpstan.level: 9
+    phpstan.level: ~
     phpstan.triggered_by: ['php']
     phpstan.memory_limit: "-1"
     phpstan.use_grumphp_paths: true
-    phpstan.ignore_patterns:
-        - "/Test/"
-        - "/Setup/"
-        - "pub/"
-        - "app/bootstrap.php"
-        - ".php-cs-fixer.php"
+    phpstan.ignore_patterns: []
 
     # PHPCSFIXER
     phpcsfixer.allow_risky: ~
@@ -30,27 +26,13 @@ parameters:
     phpcsfixer.triggered_by: ['php']
 
     # PHPCS
-    phpcs.standard: [Magento2, PSR2]
+    phpcs.standard: ['%root_conventions_dir%%phpcs_ruleset_file%']
     phpcs.severity: ~
     phpcs.warning_severity: ~
     phpcs.error_severity: ~
-    phpcs.whitelist_patterns:
-        - /^app\/code\/(.*)/
-    phpcs.ignore_patterns:
-        - "Test/Unit"
-        - "/Test/"
-        - "Setup/Patch/Data"
-        - "Setup/Upgrade"
-        - "Setup/Install"
-    phpcs.exclude:
-        - Magento2.Functions.StaticFunction
-        - Magento2.Exceptions.DirectThrow
-        - Magento2.Exceptions.ThrowCatch
-        - Magento2.Commenting.ClassAndInterfacePHPDocFormatting
-        - Magento2.Commenting.ClassPropertyPHPDocFormatting
-        - Magento2.Commenting.ConstantsPHPDocFormatting
-        - Magento2.Annotation.MethodAnnotationStructure
-        - Magento2.Annotation.MethodArguments
+    phpcs.whitelist_patterns: []
+    phpcs.ignore_patterns: []
+    phpcs.exclude: []
     phpcs.triggered_by: [php]
 
     # GIT

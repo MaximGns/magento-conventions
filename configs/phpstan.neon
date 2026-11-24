@@ -1,6 +1,14 @@
 parameters:
+    level: 9
     inferPrivatePropertyTypeFromConstructor: true
     treatPhpDocTypesAsCertain: false
+    excludePaths:
+        analyse:
+            - */Test/*
+            - */Setup/*
+            - */pub/*
+            - */app/bootstrap.php
+            - */.php-cs-fixer.php
     ignoreErrors:
         - '#(class|type) Magento\\TestFramework#i'
         - '#(class|type) Magento\\\S*Factory#i'

@@ -2,11 +2,13 @@
 ## [0.4.2]
 ### Added
 - Added `treatPhpDocTypesAsCertain: false` to the PHPStan config
-- Added `/Test/` to the default `phpcs.ignore_patterns`
-- Added `app/bootstrap.php` and `.php-cs-fixer.php` to the default `phpstan.ignore_patterns`
+- Added `configs/phpcs.xml` ruleset with the excluded sniffs and ignored paths (now also `*/Test/*`)
+- Added `excludePaths` to the PHPStan config
 
 ### Changed
-- Raised the default `phpstan.level` from 5 to 9
+- Raised the default PHPStan level from 5 to 9 and moved it to `configs/phpstan.neon`; `phpstan.level` now defaults to `~`
+- `phpcs.standard` now points to `configs/phpcs.xml`; `phpcs.exclude`, `phpcs.ignore_patterns` and `phpcs.whitelist_patterns` default to empty
+- Moved the PHPStan ignored paths to `excludePaths` in `configs/phpstan.neon` (now also `*/app/bootstrap.php` and `*/.php-cs-fixer.php`); `phpstan.ignore_patterns` defaults to empty
 
 ## [0.4.1]
 ### Fixed
